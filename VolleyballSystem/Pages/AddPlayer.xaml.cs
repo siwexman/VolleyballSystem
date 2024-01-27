@@ -21,14 +21,17 @@ namespace VolleyballSystem.Pages
     /// </summary>
     public partial class AddPlayer : Page
     {
-        public AddPlayer()
+        Team team;
+        public AddPlayer(Team selectedTeam)
         {
             InitializeComponent();
+            DataContext = selectedTeam;
+            team = selectedTeam;
         }
 
         private void CreatePlayer(object sender, RoutedEventArgs e)
         {
-
+            // Logic for entering text
             if (FirstNameBox.Text == string.Empty)
             {
                 MessageBox.Show("Enter First Name:");
@@ -45,13 +48,16 @@ namespace VolleyballSystem.Pages
                 return;
             }
 
+            
             Player player = new Player(
             FirstNameBox.Text.Substring(0, 1).ToUpper() + FirstNameBox.Text.Substring(1).ToLower(),
             LastNameBox.Text.Substring(0, 1).ToUpper() + LastNameBox.Text.Substring(1).ToLower(),
             PositionBox.Text
             );
 
-            test.Text = player.ShowPlayer();
+            team.Players.Add(player);
+
+            MessageBox.Show($"{player.FirstName} {player.LastName} has been added to {team.TeamName}");
         }
     }
 }

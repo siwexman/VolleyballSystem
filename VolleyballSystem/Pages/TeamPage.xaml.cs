@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VolleyballSystem.Classes;
+using VolleyballSystem.Interfaces;
 
 namespace VolleyballSystem.Pages
 {
@@ -20,9 +22,15 @@ namespace VolleyballSystem.Pages
     /// </summary>
     public partial class TeamPage : Page
     {
-        public TeamPage()
+        public TeamPage(Team selectedTeam)
         {
             InitializeComponent();
+            DataContext = selectedTeam;
+
+            List<Player> players = selectedTeam.Players;
+
+            listViewPlayers.Items.Clear();
+            listViewPlayers.ItemsSource = players;
         }
     }
 }

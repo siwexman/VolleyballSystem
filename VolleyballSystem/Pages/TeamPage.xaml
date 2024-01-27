@@ -9,17 +9,28 @@
       Title="TeamPage">
 
     <Grid>
+        <!--
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="0.5*"/>
         </Grid.ColumnDefinitions>
+        -->
         
-        
+        <ListView x:Name="listViewPlayers" ItemsSource="{Binding players}" HorizontalAlignment="Center">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding FirstName}" Header="First Name"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding LastName}" Header="Last Name"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Position}" Header="Position"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
     </Grid>
 </Page>

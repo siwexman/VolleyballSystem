@@ -24,5 +24,10 @@ namespace VolleyballSystem.Pages
         {
             InitializeComponent();
         }
+
+        private void btnAddMatch(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

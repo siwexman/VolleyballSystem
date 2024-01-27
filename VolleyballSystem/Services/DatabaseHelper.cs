@@ -82,7 +82,7 @@ namespace VolleyballSystem.Services
             }
         }
 
-        public static void AddDataFromCsv(int table, string csvPath)
+        public static void AddDataFromCsv(string table, string csvPath)
         {
             if (File.Exists(csvPath))
             {
@@ -104,7 +104,7 @@ namespace VolleyballSystem.Services
                                 continue; // Skip the header line
                             }
 
-                            if (table == 0) // 0 - table PLAYERS
+                            if (table.Equals("players")) // table PLAYERS
                             {
                                 string[] values = line.Split(',');
                                 string firstName = values[0];
@@ -120,7 +120,7 @@ namespace VolleyballSystem.Services
 
                                 command.ExecuteNonQuery();
                             }
-                            else if (table == 1) // 1 - table TEAMS
+                            else if (table.Equals("teams")) // table TEAMS
                             {
                                 string[] values = line.Split(',');
                                 string teamName = values[0];

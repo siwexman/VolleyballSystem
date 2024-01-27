@@ -10,40 +10,32 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="3.5*"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
-        <Label Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Wpisz imię zawodnika:"></Label>
-        <TextBox Name="FirstNameBox" Grid.Column="3" Grid.Row="1" MaxHeight="30" MaxWidth="200" MinHeight="20" MinWidth="100" VerticalContentAlignment="Center" HorizontalAlignment="Center"></TextBox>
+        <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" MinWidth="150" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Content="First Name:" Margin="10,0,0,0"></Label>
+        <TextBox Name="FirstNameBox" Grid.Column="1" Grid.Row="0" MaxHeight="30" MaxWidth="200" MinHeight="20" MinWidth="100" VerticalContentAlignment="Center" HorizontalAlignment="Center"></TextBox>
 
-        <Label Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Wpisz nazwisko zawodnika:"></Label>
-        <TextBox x:Name="LastNameBox" Grid.Column="3" Grid.Row="2" MaxHeight="30" MaxWidth="200" MinHeight="20" MinWidth="100" VerticalContentAlignment="Center" HorizontalAlignment="Center"></TextBox>
+        <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" MinWidth="150" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Content="Last Name:" Margin="10,0,0,0"></Label>
+        <TextBox x:Name="LastNameBox" Grid.Column="1" Grid.Row="1" MaxHeight="30" MaxWidth="200" MinHeight="20" MinWidth="100" VerticalContentAlignment="Center" HorizontalAlignment="Center"></TextBox>
 
-        <Label Grid.Column="2" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Wpisz pozycję zawodnika:"></Label>
-        <ComboBox x:Name="PositionBox" Grid.Column="3" Grid.Row="3" MaxHeight="30" MaxWidth="200" MinHeight="20" MinWidth="100" VerticalContentAlignment="Center" HorizontalAlignment="Center">
-            <ListBoxItem AllowDrop="True" Content="Setter"></ListBoxItem>
-            <ListBoxItem Content="Middle Blocker"></ListBoxItem>
-            <ListBoxItem Content="Outside Hitter"></ListBoxItem>
-            <ListBoxItem Content="Opposite Hitter"></ListBoxItem>
-            <ListBoxItem Content="Libero"></ListBoxItem>
-            <ListBoxItem Content="Libero"></ListBoxItem>
+        <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" MinWidth="150" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Content="Position:" Margin="10,0,0,0"></Label>
+        <ComboBox x:Name="PositionBox" Grid.Column="1" Grid.Row="2" MaxHeight="30" MaxWidth="200" MinHeight="20" MinWidth="100" VerticalContentAlignment="Center" HorizontalAlignment="Center">
+            <ListBoxItem AllowDrop="True" Content="Setter"/>
+            <ListBoxItem Content="Middle Blocker"/>
+            <ListBoxItem Content="Outside Hitter"/>
+            <ListBoxItem Content="Opposite Hitter"/>
+            <ListBoxItem Content="Libero"/>
         </ComboBox>
 
-        <Button Grid.Column="4" Grid.Row="4" MaxHeight="30" MaxWidth="200" MinHeight="20" MinWidth="100" VerticalContentAlignment="Center" HorizontalAlignment="Center" Content="Add" Click="CreatePlayer"></Button>
+        <Button Grid.Column="2" Grid.Row="2" MaxHeight="30" MaxWidth="200" MinHeight="20" MinWidth="50" VerticalContentAlignment="Center" HorizontalAlignment="Center" Content="Add" Click="CreatePlayer"></Button>
 
-        <TextBox x:Name="test" Grid.Column="2" Grid.Row="0" TextWrapping="WrapWithOverflow"></TextBox>
     </Grid>
 </Page>

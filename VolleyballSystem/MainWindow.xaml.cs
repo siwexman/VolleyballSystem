@@ -9,6 +9,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VolleyballSystem.Classes;
+using VolleyballSystem.Pages;
+using VolleyballSystem.Services;
 
 namespace VolleyballSystem
 {
@@ -23,35 +25,31 @@ namespace VolleyballSystem
         Team team3 = new Team();
         Team team4 = new Team();
         Team team5 = new Team();
+
         public MainWindow()
-        {
-            /*
+        {            
             DatabaseHelper.InitializeDatabase();
-            DatabaseHelper.AddDataFromCsv(1, @"..\..\..\Files\teams.csv");
-            DatabaseHelper.AddDataFromCsv(0, @"..\..\..\Files\players.csv");
-            */
+            DatabaseHelper.AddDataFromCsv("teams", @"..\..\..\Files\teams.csv");
+            DatabaseHelper.AddDataFromCsv("players", @"..\..\..\Files\players.csv");
+            
             InitializeComponent();
-        }
+            DataContext = new MainViewModel();
 
-        private void BtnAddPlayer(object sender, RoutedEventArgs e)
-        {
-            //Content = new AddPlayer();
-            MessageBox.Show("Essa");
-        }
-
-        private void BtnAddMatch(object sender, RoutedEventArgs e)
-        {
-            //Content = new AddMatch();
-        }
-
-        private void BtnShowTeams(object sender, RoutedEventArgs e)
-        {
             team1.TeamName = "Lubcza";
             team2.TeamName = "Urzet";
             team3.TeamName = "AKS";
             team4.TeamName = "Rakszawa";
             team5.TeamName = "Bystrzaki";
-            //Content = new ShowTeams();
+
+            team1.Players = new List<Player>()
+            {
+                new Player("Karol", "Musza", "Setter"),
+                new Player("Karol", "Dusza", "Libero"),
+                new Player("Jakub", "Musza", "Outisde Hitter"),
+                new Player("Marcin", "Musza", "Opposite Hitter")
+            };
+
+            //Content = new ShowSelectedTeam();
             standings = new List<Standings>()
             {
                 new Standings(team1,5,15,15,0),
@@ -60,17 +58,41 @@ namespace VolleyballSystem
                 new Standings(team4,5,2,3,56),
                 new Standings(team5,5,2,3,12)
             };
-
-            listViewPlayers.ItemsSource = standings;
+            listViewTeams.Items.Clear();
+            listViewTeams.ItemsSource = standings;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void BtnAddPlayer(object sender, RoutedEventArgs e)
         {
-            if (listViewPlayers.SelectedItem != null)
+            if (listViewTeams.SelectedItem != null)
             {
-                Standings selectedStanding = listViewPlayers.SelectedItem as Standings;
-                standings.Remove(selectedStanding);
-                listViewPlayers.Items.Refresh();
+                Standings selectedStanding = listViewTeams.SelectedItem as Standings;
+                Team selectedTeam = selectedStanding.Team;
+                AddPlayer addPlayer = new AddPlayer(selectedTeam);
+                addPlayer.DataContext = DataContext;
+                NavigationFrame.NavigationService.Navigate(addPlayer);
+            }
+            else
+            {
+                MessageBox.Show("Select Team");
+            }
+        }
+
+        private void BtnAddMatch(object sender, RoutedEventArgs e)
+        {
+            AddMatch addMatch = new AddMatch();
+            NavigationFrame.NavigationService.Navigate(addMatch);
+        }
+
+        private void BtnShowSelectedTeam(object sender, RoutedEventArgs e)
+        {
+            if (listViewTeams.SelectedItem != null)
+            {
+                Standings selectedStanding = listViewTeams.SelectedItem as Standings;
+                Team selectedTeam = selectedStanding.Team;
+                TeamPage teamPage = new TeamPage(selectedTeam);
+                teamPage.DataContext = DataContext;
+                NavigationFrame.NavigationService.Navigate(teamPage);
             }
         }
     }

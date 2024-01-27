@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VolleyballSystem"
         mc:Ignorable="d"
-        Title="VolleballSystem" Height="450" Width="800">
-    
+        Title="VolleballSystem" Height="600" Width="1000" MinHeight="500" MinWidth="1000">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="0.2*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="0.2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -20,7 +20,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <ListView  x:Name="listViewPlayers" Grid.Row="1" Grid.Column="2" ItemsSource="{Binding standings}" HorizontalAlignment="Center">
+        <Frame x:Name="NavigationFrame" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2"  NavigationUIVisibility="Hidden"/>
+        <ListView  x:Name="listViewTeams" Grid.Row="1" Grid.Column="2" ItemsSource="{Binding standings}" HorizontalAlignment="Center">
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Team.TeamName}" Header="Team Name" />
@@ -33,9 +34,8 @@
         </ListView>
         <!--<ListBox x:Name="listTeams" Grid.Row="1" Grid.Column="2"></ListBox>-->
 
-        <Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="25" Content="Add Player" Click="BtnAddPlayer" Margin="20"></Button>
-        <Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="25" Content="Add Match" Click="BtnAddMatch"></Button>
-        <Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="100" Height="25" Content="Show Teams" Click="BtnShowTeams" Margin="20"></Button>
-        <Button Content="TEST" Click="Button_Click"/>
+        <Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Width="auto" MinWidth="125" Height="25" Content="Add Player" Click="BtnAddPlayer" Margin="20"></Button>
+        <Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" MinWidth="125" Height="25" Content="Add Match" Click="BtnAddMatch"></Button>
+        <Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="auto" MinWidth="125" Height="25" Content="Show Selected Team" Click="BtnShowSelectedTeam" Margin="20"/>
     </Grid>
 </Window>

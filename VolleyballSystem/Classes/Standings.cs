@@ -23,5 +23,7 @@ namespace VolleyballSystem.Classes
             this.SetsWon = setsWon;
             this.SetsLose = setsLose;
         }
+
+        public Team GetTeam() { return Team; }
     }
 }
