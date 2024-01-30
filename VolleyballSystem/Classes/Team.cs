@@ -14,6 +14,11 @@ namespace VolleyballSystem.Classes
 
         public Team() { }
 
+        public Team(List<Player> players)
+        {
+            this.Players = players;
+        }
+
         public Team(string teamName)
         {
             this.TeamName = teamName;

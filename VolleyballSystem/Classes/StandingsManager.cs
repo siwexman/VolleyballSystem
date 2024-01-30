@@ -11,17 +11,12 @@ namespace VolleyballSystem.Classes
     {
         public List<Standings> ListStandings { get; set; } = new List<Standings>();
         public List<Team> teams;
+        public List<Player> players;
 
-        public StandingsManager()
+        public StandingsManager(ITeamRepository teamRepository, IPlayerRepository playerRepository)
         {
-            teams = new List<Team>()
-            {
-                new Team("Lubcza"),
-                new Team("Urzet"),
-                new Team("AKS"),
-                new Team("Rakszawa"),
-                new Team("Bystrzaki"),
-            };
+            teams = teamRepository.GetAllTeams().ToList<Team>();
+            players = playerRepository.GetAllPlayers().ToList<Player>();
         }
 
         public void AddStats(Match match)
@@ -39,6 +34,35 @@ namespace VolleyballSystem.Classes
 
             standingsHost.SetsWon += match.ScoreHost;
             standingsHost.SetsLose += match.ScoreGuest;
+
+            if (match.ScoreHost > match.ScoreGuest) // who scored more
+            {
+                // true - host win
+                if (match.ScoreHost - match.ScoreGuest > 1)
+                {
+                    standingsHost.Points += 3;
+                }
+                else
+                {
+                    // tie-break
+                    standingsHost.Points += 2;
+                    standingsGuest.Points += 1;
+                }
+            }
+            else
+            {
+                // false - guest win
+                if (match.ScoreGuest - match.ScoreHost > 1)
+                {
+                    standingsGuest.Points += 3;
+                }
+                else
+                {
+                    // tie-break
+                    standingsGuest.Points += 2;
+                    standingsHost.Points += 1;
+                }
+            }
         }
     }
 }

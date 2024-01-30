@@ -9,12 +9,27 @@ using VolleyballSystem.Classes;
 
 namespace VolleyballSystem.Interfaces
 {
-    public interface ITeams
+    public interface ITeamRepository
     {
         IEnumerable<Team> GetAllTeams();
     }
 
-    public class SQLiteTeams : ITeams
+    public class MockTeamRepository : ITeamRepository
+    {
+        public IEnumerable<Team> GetAllTeams()
+        {
+            return new List<Team>()
+            {
+                new Team("Lubcza"),
+                new Team("Urzet"),
+                new Team("AKS"),
+                new Team("Rakszawa"),
+                new Team("Bystrzaki"),
+            };
+        }
+    }
+
+    public class SQLiteTeams : ITeamRepository
     {
         private string connectionString = @"Data Source=..\..\..\Files\VolleyballSystem.db;Version=3";
 

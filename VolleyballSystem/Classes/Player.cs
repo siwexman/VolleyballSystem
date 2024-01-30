@@ -12,6 +12,7 @@ namespace VolleyballSystem.Classes
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Position { get; set; }
+        public Team Team { get; set; }
 
         public Player(string firstName, string lastName, string position)
         {

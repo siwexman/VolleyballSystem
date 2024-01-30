@@ -5,23 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VolleyballSystem"
         mc:Ignorable="d"
-        Title="VolleballSystem" Height="600" Width="1000" MinHeight="500" MinWidth="1000">
-    <Grid>
+        Title="VolleballSystem" MinHeight="750" MinWidth="1300" WindowStartupLocation="CenterScreen">
+    <Grid Margin="0,0,0,-6">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="0.2*"/>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="0.75*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition/>
+            <RowDefinition Height="0.25*"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
 
-        <Frame x:Name="NavigationFrame" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2"  NavigationUIVisibility="Hidden"/>
-        <ListView  x:Name="listViewTeams" Grid.Row="1" Grid.Column="2" ItemsSource="{Binding standings}" HorizontalAlignment="Center">
+        <!--<Frame x:Name="NavigationFrame" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2"  NavigationUIVisibility="Hidden"/>-->
+
+        <!-- List view Teams/Standings-->
+        <ListView  x:Name="listViewTeams" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding standings}" SelectionChanged="TeamsSelectionChanged" HorizontalAlignment="Center" FontSize="18">
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Team.TeamName}" Header="Team Name" />
@@ -33,8 +36,58 @@
             </ListView.View>
         </ListView>
 
-        <Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Width="auto" MinWidth="125" Height="25" Content="Add Player" Click="BtnAddPlayer" Margin="20"></Button>
-        <Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="auto" MinWidth="125" Height="25" Content="Add Match" Click="BtnAddMatch"></Button>
-        <Button Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="auto" MinWidth="125" Height="25" Content="Show Selected Team" Click="BtnShowSelectedTeam" Margin="20"/>
+        <!-- List view Players -->
+        <ListView x:Name="listViewPlayers" Grid.Row="1" Grid.Column="3" FontSize="18" HorizontalAlignment="Center" Margin="0,0,100,0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding FirstName}" Header="First Name"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding LastName}" Header="Last Name"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Position}" Header="Position"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Add Match -->
+        <Canvas Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <Label Content="Host Team:" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Margin="-100,20" FontSize="18"/>
+            <ComboBox x:Name="comboHost" Grid.Row="2" Grid.Column="1" Width="100" Height="30" VerticalAlignment="Top" Margin="50,20" FontSize="18">
+                <ListBoxItem AllowDrop="True"/>
+            </ComboBox>
+
+            <Label Grid.Row="2" Grid.Column="1" Content="Guest Team:" VerticalAlignment="Top" Margin="-100,70" FontSize="18"/>
+            <ComboBox x:Name="comboGuest" Grid.Row="2" Grid.Column="1" Width="100" Height="30" VerticalAlignment="Top" Margin="50,70" FontSize="18">
+                <ListBoxItem AllowDrop="True"/>
+            </ComboBox>
+
+            <Label Grid.Row="2" Grid.Column="1" Content="Score Host:" VerticalAlignment="Top" Margin="-150,120" FontSize="18"/>
+            <TextBox x:Name="textBoxScoreHost" PreviewTextInput="textBoxScore_PreviewTextInput" Grid.Row="2" Grid.Column="1" Width="100" Height="30" VerticalAlignment="Top" Margin="50,120" FontSize="18"/>
+
+            <Label Grid.Row="2" Grid.Column="1" Content="Score Guest:" VerticalAlignment="Top" Margin="-150,170" FontSize="18"/>
+            <TextBox x:Name="textBoxScoreGuest" PreviewTextInput="textBoxScore_PreviewTextInput" Grid.Row="2" Grid.Column="1" Width="100" Height="30" VerticalAlignment="Top" Margin="50,170" FontSize="18"/>
+
+            <Button Grid.Column="1" Grid.Row="2" Width="auto" MinWidth="125" Height="30" Content="Add Match" Click="BtnAddMatch" Margin="20,250" FontSize="18"></Button>
+        </Canvas>
+
+
+        <!-- Add Player -->
+        <Label Grid.Row="2" Grid.Column="3" Content="First Name:" VerticalAlignment="Top" Margin="10,20,0,0" FontSize="18"/>
+        <TextBox x:Name="textBoxFirstName" Grid.Row="2" Grid.Column="3" Width="120" Height="30" VerticalAlignment="Top" Margin="10,20,0,0" FontSize="18"/>
+       
+        <Label Grid.Row="2" Grid.Column="3" Content="Last Name:" VerticalAlignment="Top" Margin="10,70,0,0" FontSize="18"/>
+        <TextBox x:Name="textBoxLastName" Grid.Row="2" Grid.Column="3" Width="120" Height="30" VerticalAlignment="Top" Margin="10,70,0,0" FontSize="18"/>
+       
+        <Label Grid.Row="2" Grid.Column="3" Content="Position:" VerticalAlignment="Top" Margin="10,120,0,0" FontSize="18"/>
+        <ComboBox x:Name="comboPosition" Grid.Column="3" Grid.Row="2" Width="100" Height="30" VerticalAlignment="Top" Margin="0,120,0,0" FontSize="18">
+            <ListBoxItem AllowDrop="True" Content="Setter"/>
+            <ListBoxItem Content="Middle Blocker"/>
+            <ListBoxItem Content="Outside Hitter"/>
+            <ListBoxItem Content="Opposite Hitter"/>
+            <ListBoxItem Content="Libero"/>
+        </ComboBox>
+        <Button Grid.Column="3" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="auto" MinWidth="125" Height="30" Content="Add Player" Click="BtnAddPlayer" Margin="20,50" FontSize="18"/>
+
+        <!-- Delete Player -->
+        <Button Grid.Column="3" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="auto" MinWidth="125" Height="30" Content="Delete Player" Click="BtnDeletePlayer" FontSize="18"></Button>
+
     </Grid>
 </Window>
