@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.ComponentModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VolleyballSystem.Classes;
+using VolleyballSystem.Interfaces;
 using VolleyballSystem.Pages;
 using VolleyballSystem.Services;
 
@@ -27,12 +29,16 @@ namespace VolleyballSystem
         Team team5 = new Team();
 
         public MainWindow()
-        {            
+        {
             DatabaseHelper.InitializeDatabase();
             DatabaseHelper.AddDataFromCsv("teams", @"..\..\..\Files\teams.csv");
             DatabaseHelper.AddDataFromCsv("players", @"..\..\..\Files\players.csv");
-            
+
             InitializeComponent();
+            /*
+            SQLiteTeams sqliteTeams = new SQLiteTeams();
+            IEnumerable<Team> teams = sqliteTeams.GetAllTeams();
+            */
             DataContext = new MainViewModel();
 
             team1.TeamName = "Lubcza";
@@ -49,7 +55,17 @@ namespace VolleyballSystem
                 new Player("Marcin", "Musza", "Opposite Hitter")
             };
 
-            //Content = new ShowSelectedTeam();
+            StandingsManager standingsManager = new StandingsManager();
+            standingsManager.ListStandings = new List<Standings>
+            {
+                new Standings(team1,5,15,15,0),
+                new Standings(team2,5,12,3,21),
+                new Standings(team3,5,10,2,1),
+                new Standings(team4,5,2,3,56),
+                new Standings(team5,5,2,3,12)
+            };
+            List<Standings> standings = standingsManager.ListStandings;
+            /*
             standings = new List<Standings>()
             {
                 new Standings(team1,5,15,15,0),
@@ -58,6 +74,8 @@ namespace VolleyballSystem
                 new Standings(team4,5,2,3,56),
                 new Standings(team5,5,2,3,12)
             };
+            */
+
             listViewTeams.Items.Clear();
             listViewTeams.ItemsSource = standings;
         }
@@ -95,5 +113,6 @@ namespace VolleyballSystem
                 NavigationFrame.NavigationService.Navigate(teamPage);
             }
         }
+
     }
 }

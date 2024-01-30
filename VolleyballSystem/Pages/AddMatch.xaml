@@ -22,18 +22,20 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Host Team Name:" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <ComboBox x:Name="comboHostTeams" Grid.Row="0" Grid.Column="1" Width="100" Height="30">
+        <ComboBox x:Name="comboHostTeams" DisplayMemberPath="{Binding TeamName}" Grid.Row="0" Grid.Column="1" Width="100" Height="30">
             <ListBoxItem AllowDrop="True"/>
         </ComboBox>
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Guest Team Name:" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <ComboBox x:Name="comboGuestTeams" Grid.Row="1" Grid.Column="1" Width="100" Height="30"/>
+        <ComboBox x:Name="comboGuestTeams" DisplayMemberPath="{Binding TeamName}" Grid.Row="1" Grid.Column="1" Width="100" Height="30">
+            <ListBoxItem AllowDrop="True"/>
+        </ComboBox>
 
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Host Team Score:" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBox x:Name="textBoxScoreHost" Grid.Row="2" Grid.Column="1" Width="100" Height="30"/>
+        <TextBox x:Name="textBoxScoreHost" PreviewTextInput="textBoxScore_PreviewTextInput" Grid.Row="2" Grid.Column="1" Width="100" Height="30"/>
         
         <TextBlock Grid.Row="3" Grid.Column="0" Text="Guest Team Score:" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBox x:Name="textBoxScoreGuest" Grid.Row="3" Grid.Column="1" Width="100" Height="30"/>
+        <TextBox x:Name="textBoxScoreGuest" PreviewTextInput="textBoxScore_PreviewTextInput" Grid.Row="3" Grid.Column="1" Width="100" Height="30"/>
 
         <Button Grid.Column="2" Grid.Row="3" Width="75" Height="20" Click="btnAddMatch" Content="Add Match"/>
     </Grid>

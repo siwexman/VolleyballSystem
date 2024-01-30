@@ -36,18 +36,8 @@ namespace VolleyballSystem.Services
                             TeamID INTEGER,
                             FOREIGN KEY(TeamID) REFERENCES TEAMS(TeamID)
                             );";
-
-                    // Referees table
-                    /*
-                    string createRefereesTableQuery = @"
-                        CREATE TABLE IF NOT EXISTS REFEREES (
-                            RefereeID INTEGER PRIMARY KEY AUTOINCREMENT,
-                            FirstName TEXT NOT NULL,
-                            LastName TEXT NOT NULL,
-                            Experience INTEGER NOT NULL
-                            );";
                     
-
+                    /*
                     // Matches table
                     string createMatchesTableQuery = @"
                         CREATE TABLE IF NOT EXISTS MATCHES (

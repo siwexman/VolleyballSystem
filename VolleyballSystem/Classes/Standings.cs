@@ -15,6 +15,11 @@ namespace VolleyballSystem.Classes
         public int SetsLose { get; set; }
         public Team Team { get; set; }
 
+        public Standings(Team team)
+        {
+
+        }
+
         public Standings(Team team, int matchesPlayed, int points, int setsWon, int setsLose)
         {
             this.Team = team;
