@@ -33,11 +33,10 @@ namespace VolleyballSystem.Services
                             FirstName TEXT NOT NULL,
                             LastName TEXT NOT NULL,
                             Position TEXT NOT NULL,
-                            TeamID INTEGER,
-                            FOREIGN KEY(TeamID) REFERENCES TEAMS(TeamID)
+                            TeamID INTEGER
                             );";
                     
-                    /*
+                    
                     // Matches table
                     string createMatchesTableQuery = @"
                         CREATE TABLE IF NOT EXISTS MATCHES (
@@ -45,13 +44,9 @@ namespace VolleyballSystem.Services
                             HostTeamID INTEGER,
                             GuestTeamID INTEGER,
                             ScoreHost INTEGER,
-                            ScoreGuest INTEGER,
-                            RefereeID INTEGER,
-                            FOREIGN KEY(HostTeamID) REFERENCES TEAMS(TeamID),
-                            FOREIGN KEY(GuestTeamID) REFERENCES TEAMS(TeamID),
-                            FOREIGN KEY(RefereeID) REFERENCES REFEREES(RefereeID)
+                            ScoreGuest INTEGER
                             );";
-                    */
+                    
                     using (var command = new SQLiteCommand(connection))
                     {
                         // Executing sql
@@ -61,11 +56,8 @@ namespace VolleyballSystem.Services
                         command.CommandText = createPlayersTableQuery;
                         command.ExecuteNonQuery();
 
-                        //command.CommandText = createRefereesTableQuery;
-                        //command.ExecuteNonQuery();
-
-                        //command.CommandText = createMatchesTableQuery;
-                        //command.ExecuteNonQuery();
+                        command.CommandText = createMatchesTableQuery;
+                        command.ExecuteNonQuery();
                     }
 
                 }
@@ -128,7 +120,20 @@ namespace VolleyballSystem.Services
 
         public static string GetConnectionString()
         {
-            return connectionString.Split(';')[0];
+            return connectionString;
+        }
+
+        // Returns bool if dataflag file exists
+        public static bool DataHasBeenAdded()
+        {
+            return File.Exists(@"..\..\..\Files\DataAddedFlag.txt");
+        }
+
+        // Creates txt file that confirm that data has been added
+        // It prevents the data from being duplicated
+        public static void SetDataAddedFlag()
+        {
+            File.WriteAllText(@"..\..\..\Files\DataAddedFlag.txt", $"Data has been added.");
         }
     }
 }

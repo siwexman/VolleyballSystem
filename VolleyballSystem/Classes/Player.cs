@@ -12,13 +12,21 @@ namespace VolleyballSystem.Classes
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Position { get; set; }
-        public Team Team { get; set; }
+        public int TeamID { get; set; }
 
         public Player(string firstName, string lastName, string position)
         {
             this.FirstName = firstName;
             this.LastName = lastName;
             this.Position = position;
+        }
+
+        public Player(string firstName, string lastName, string position, int teamID)
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Position = position;
+            this.TeamID = teamID;
         }
 
         public string ShowPlayer()

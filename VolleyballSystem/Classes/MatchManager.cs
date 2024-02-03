@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VolleyballSystem.Interfaces;
 
 namespace VolleyballSystem.Classes
 {
     public class MatchManager
     {
-        public List<Standings> standings { get; set; } = new List<Standings>();
-        List<Match> matches;
+        List<Match> Matches { get; set; } = new List<Match>();
 
-        public void AddStats(Match match)
+        public MatchManager(IMatchRepository matchRepository)
         {
+            Matches = matchRepository.GetAllMatches().ToList();
+        }
 
+        public List<Match> GetMeches()
+        {
+            return Matches;
         }
 
     }

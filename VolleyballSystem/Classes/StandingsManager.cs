@@ -3,37 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using VolleyballSystem.Interfaces;
 
 namespace VolleyballSystem.Classes
 {
     public class StandingsManager
     {
-        public List<Standings> ListStandings { get; set; } = new List<Standings>();
-        public List<Team> teams;
-        public List<Player> players;
+        public List<Standing> ListStandings { get; set; } = new List<Standing>();
 
-        public StandingsManager(ITeamRepository teamRepository, IPlayerRepository playerRepository)
+        public void FIllWithTeams(List<Team> teams)
         {
-            teams = teamRepository.GetAllTeams().ToList<Team>();
-            players = playerRepository.GetAllPlayers().ToList<Player>();
+            for (int i = 0; i < teams.Count(); i++)
+            {
+                ListStandings.Add(new Standing(teams[i]));
+            }
         }
 
-        public void AddStats(Match match)
+        public void UpdateTable(ListView listView, List<Standing> standings)
         {
-            Standings standingsHost = new Standings(match.HostTeam);
-            Standings standingsGuest = new Standings(match.GuestTeam);
+            List<Standing> orderedStandings = new List<Standing>();
+            orderedStandings = standings.OrderByDescending(s=>s.Points).ThenByDescending(s=>s.SetsWon).ToList();
+
+            listView.Items.Refresh();
+
+            listView.ItemsSource = orderedStandings;
+        }
+
+        public void UpdateStats(Match match)
+        {
+            Standing standingsHost = ListStandings.Find(s => s.Team.Id == match.HostTeamID);
+            Standing standingsGuest = ListStandings.Find(s => s.Team.Id == match.GuestTeamID);
 
             // Incrementing MatchesPlayed
             standingsHost.MatchesPlayed++;
             standingsGuest.MatchesPlayed++;
 
-            // Adding Score to Host and Guest Team
+            // Adding Score to Host Team
             standingsHost.SetsWon += match.ScoreHost;
             standingsHost.SetsLose += match.ScoreGuest;
 
-            standingsHost.SetsWon += match.ScoreHost;
-            standingsHost.SetsLose += match.ScoreGuest;
+            // Adding Score to Guest
+            standingsGuest.SetsWon += match.ScoreGuest;
+            standingsGuest.SetsLose += match.ScoreHost;
 
             if (match.ScoreHost > match.ScoreGuest) // who scored more
             {
@@ -62,6 +74,14 @@ namespace VolleyballSystem.Classes
                     standingsGuest.Points += 2;
                     standingsHost.Points += 1;
                 }
+            }
+        }
+
+        public void UpdateStandings(List<Match> matches)
+        {
+            foreach (Match match in matches)
+            {
+                UpdateStats(match);
             }
         }
     }

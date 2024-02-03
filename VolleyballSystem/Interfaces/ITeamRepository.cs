@@ -49,7 +49,9 @@ namespace VolleyballSystem.Interfaces
                         while (reader.Read())
                         {
                             int id = reader.GetInt32(reader.GetOrdinal("TeamID"));
-                            string title = reader.GetString(reader.GetOrdinal("TeamName"));
+                            string teamName = reader.GetString(reader.GetOrdinal("TeamName"));
+
+                            teams.Add(new Team(id, teamName));
                         }
                     }
                 }

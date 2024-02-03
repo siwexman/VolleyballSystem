@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:VolleyballSystem"
         mc:Ignorable="d"
         Title="VolleballSystem" MinHeight="750" MinWidth="1300" WindowStartupLocation="CenterScreen">
-    <Grid Margin="0,0,0,-6">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.5*"/>
             <ColumnDefinition Width="1*"/>
@@ -20,9 +20,9 @@
             <RowDefinition Height="1.5*"/>
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
-
-        <!--<Frame x:Name="NavigationFrame" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2"  NavigationUIVisibility="Hidden"/>-->
-
+        
+        <!--<TextBlock x:Name="testblock"/>-->
+        
         <!-- List view Teams/Standings-->
         <ListView  x:Name="listViewTeams" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding standings}" SelectionChanged="TeamsSelectionChanged" HorizontalAlignment="Center" FontSize="18">
             <ListView.View>
@@ -37,7 +37,7 @@
         </ListView>
 
         <!-- List view Players -->
-        <ListView x:Name="listViewPlayers" Grid.Row="1" Grid.Column="3" FontSize="18" HorizontalAlignment="Center" Margin="0,0,100,0">
+        <ListView x:Name="listViewPlayers" Grid.Row="1" Grid.Column="3" MinWidth="350"  FontSize="18" HorizontalAlignment="Center">
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding FirstName}" Header="First Name"/>

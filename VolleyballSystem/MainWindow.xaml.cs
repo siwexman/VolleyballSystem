@@ -11,9 +11,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VolleyballSystem.Classes;
 using VolleyballSystem.Interfaces;
-using VolleyballSystem.Pages;
 using VolleyballSystem.Services;
-using static VolleyballSystem.Interfaces.IPlayerRepository;
 
 namespace VolleyballSystem
 {
@@ -22,51 +20,27 @@ namespace VolleyballSystem
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Team> teams;
-        private StandingsManager _standingsManager = new StandingsManager(new MockTeamRepository(), new MockPlayerRepository());
+        string connectionString = DatabaseHelper.GetConnectionString();
+        private TeamManager _teamManager = new TeamManager(new SQLiteTeams(), new SQLitePlayers());
+        private StandingsManager _standingsManager = new StandingsManager();
+        private MatchManager _matchManager = new MatchManager(new SQLiteMatch());
+
+        private List<Standing> standings = new List<Standing>();
+        //ManagerHelper managerHelper = new ManagerHelper();
 
         public MainWindow()
         {
-            /*
-            DatabaseHelper.InitializeDatabase();
-            DatabaseHelper.AddDataFromCsv("teams", @"..\..\..\Files\teams.csv");
-            DatabaseHelper.AddDataFromCsv("players", @"..\..\..\Files\players.csv");
-            */
+            //StandingsManager _standingsManager = managerHelper.StandingsManager();
+            //TeamManager _teamManager = managerHelper.TeamManager();
+            //MatchManager _matchManager = managerHelper.MatchManager();
+
+            _standingsManager.FIllWithTeams(_teamManager.GetTeams()); // fill standings with teams
+
             InitializeComponent();
-            Loaded += (sender, e) => SetFullScreen();
+            Loaded += (sender, e) => SetFullScreen(); // set window to fullsize
 
-            /*
-            SQLiteTeams sqliteTeams = new SQLiteTeams();
-            IEnumerable<Team> teams = sqliteTeams.GetAllTeams();
-            */
-            //DataContext = new MainViewModel();
-
-            teams = _standingsManager.teams;
-
-            teams[0].Players = new List<Player>()
-            {
-                new Player("Karol", "Musza", "Setter"),
-                new Player("Karol", "Dusza", "Libero"),
-                new Player("Jakub", "Musza", "Outisde Hitter"),
-                new Player("Marcin", "Musza", "Opposite Hitter")
-            };
-
-            teams[1].Players = new List<Player>()
-            {
-                new Player("Mateusz", "Kusza", "Setter"),
-                new Player("Karol", "Dusza", "Libero"),
-                new Player("Henryk", "Musza", "Outisde Hitter"),
-            };
-
-            _standingsManager.ListStandings = new List<Standings>
-            {
-                new Standings(teams[0],5,15,15,0),
-                new Standings(teams[1],5,12,3,21),
-                new Standings(teams[2],5,10,2,1),
-                new Standings(teams[3],5,2,3,56),
-                new Standings(teams[4],5,2,3,12)
-            };
-            List<Standings> standings = _standingsManager.ListStandings;
+            standings = _standingsManager.ListStandings;
+            List<Team> teams = _teamManager.ListTeams;
 
             // clear listView and comboboxes
             comboHost.Items.Clear();
@@ -79,38 +53,52 @@ namespace VolleyballSystem
             comboGuest.DisplayMemberPath = "TeamName";
 
             listViewTeams.ItemsSource = standings;
+            _standingsManager.UpdateStandings(_matchManager.GetMeches());
+            _standingsManager.UpdateTable(listViewTeams, standings);
         }
 
+        // Adding player to team
         private void BtnAddPlayer(object sender, RoutedEventArgs e)
         {
-            /*
             if (listViewTeams.SelectedItem != null)
             {
-                Standings selectedStanding = listViewTeams.SelectedItem as Standings;
+                Standing selectedStanding = listViewTeams.SelectedItem as Standing;
                 Team selectedTeam = selectedStanding.Team;
-                AddPlayer addPlayer = new AddPlayer(selectedTeam);
-                addPlayer.DataContext = DataContext;
-                //NavigationFrame.NavigationService.Navigate(addPlayer);
+
+                string firstName = textBoxFirstName.Text;
+                string lastName = textBoxLastName.Text;
+                string position = comboPosition.Text;
+                int teamID = selectedTeam.Id;
+
+                Player player = new Player(firstName, lastName, position, teamID);
+                SQLitePlayers.AddPlayer(connectionString, player);
+                selectedTeam.Players.Add(player);
+
+                MessageBox.Show($"{player.ShowPlayer()} has been added to {selectedTeam.TeamName}");
+                listViewPlayers.Items.Refresh();
+                ClearInputs();
             }
             else
             {
                 MessageBox.Show("Select Team");
             }
-            */
+
         }
 
+        // Remove player from team
         private void BtnDeletePlayer(object sender, RoutedEventArgs e)
         {
             if (listViewPlayers.SelectedItem != null)
             {
+                Player player = listViewPlayers.SelectedItem as Player;
+                SQLitePlayers.RemovePlayer(connectionString, player);
+                Standing standing = listViewTeams.SelectedValue as Standing;
                 int indexPlayer = listViewPlayers.SelectedIndex;
-                Team team = listViewTeams.SelectedItem as Team;
+                Team team = standing.Team;
                 team.Players.RemoveAt(indexPlayer);
 
-                Player player = listViewPlayers.SelectedItem as Player;
-                //team.Players.Remove(player);
-                MessageBox.Show("Player has been deleted");
-                MessageBox.Show(indexPlayer.ToString());
+                MessageBox.Show($"{player.ShowPlayer()} has been removed from {team.TeamName}");
+                listViewPlayers.Items.Refresh();
             }
             else
             {
@@ -118,13 +106,10 @@ namespace VolleyballSystem
             }
         }
 
+        // Add match and update standings
         private void BtnAddMatch(object sender, RoutedEventArgs e)
         {
-            if (comboHost.SelectedItem != comboGuest.SelectedItem)
-            {
-                MessageBox.Show(comboHost.SelectedIndex.ToString());
-            }
-            else if (textBoxScoreGuest.Text.Equals("") || textBoxScoreHost.Text.Equals(""))
+            if (textBoxScoreGuest.Text.Equals("") || textBoxScoreHost.Text.Equals(""))
             {
                 MessageBox.Show("Input Score");
             }
@@ -136,33 +121,41 @@ namespace VolleyballSystem
             {
                 MessageBox.Show("Select Teams");
             }
-            else
+            else if (comboHost.SelectedItem == comboGuest.SelectedItem)
             {
                 MessageBox.Show("Teams are the same! Change it!");
                 return;
+            }
+            else
+            {
+                // Adding match
+                Team hostTeam = comboHost.SelectedItem as Team;
+                Team guestTeam = comboGuest.SelectedItem as Team;
+                int scoreHost = Int32.Parse(textBoxScoreHost.Text);
+                int scoreGuest = Int32.Parse(textBoxScoreGuest.Text);
+
+                Match match = new Match(hostTeam.Id, guestTeam.Id, scoreHost, scoreGuest);
+                SQLiteMatch.AddMatch(connectionString, match);
+                _standingsManager.UpdateStats(match);
+
+                MessageBox.Show("Match has been added");
+                listViewTeams.Items.Refresh();
+                _standingsManager.UpdateTable(listViewTeams, standings);
+                ClearInputs();
             }
         }
 
         private void TeamsSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //listViewPlayers.Items.Clear();
-
-            foreach (Standings standings in listViewTeams.Items)
+            foreach (Standing standings in listViewTeams.Items)
             {
-                Standings selectedStanding = listViewTeams.SelectedItem as Standings;
+                Standing selectedStanding = listViewTeams.SelectedItem as Standing;
                 Team selectedTeam = selectedStanding.Team;
                 listViewPlayers.ItemsSource = selectedTeam.Players;
             }
-            /*
-            if (listViewTeams.SelectedItem != null)
-            {
-                Standings selectedStanding = listViewTeams.SelectedItem as Standings;
-                Team selectedTeam = selectedStanding.Team;
-                listViewPlayers.ItemsSource = selectedTeam.Players;
-            }
-            */
         }
 
+        // allows u to input only one number
         private void textBoxScore_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (!IsNumeric(e.Text))
@@ -182,9 +175,24 @@ namespace VolleyballSystem
             return int.TryParse(text, out _);
         }
 
+        // Sets window to fullscreen
         private void SetFullScreen()
         {
             WindowState = WindowState.Maximized;
+        }
+
+        // Clears inputs
+        public void ClearInputs()
+        {
+
+            textBoxFirstName.Clear();
+            textBoxLastName.Clear();
+            comboPosition.Items.Clear();
+
+            comboHost.SelectedItem = null;
+            comboGuest.SelectedItem = null;
+            textBoxScoreHost.Clear();
+            textBoxScoreGuest.Clear();
         }
     }
 }
