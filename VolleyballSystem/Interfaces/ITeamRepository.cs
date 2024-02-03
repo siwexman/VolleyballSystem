@@ -31,7 +31,7 @@ namespace VolleyballSystem.Interfaces
 
     public class SQLiteTeams : ITeamRepository
     {
-        private string connectionString = @"Data Source=..\..\..\Files\VolleyballSystem.db;Version=3";
+        private string connectionString = @"Data Source=..\..\..\..\Files\VolleyballSystem.db;Version=3";
 
         public IEnumerable<Team> GetAllTeams()
         {

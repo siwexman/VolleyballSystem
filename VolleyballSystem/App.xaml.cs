@@ -17,8 +17,8 @@ namespace VolleyballSystem
 
             if (!DatabaseHelper.DataHasBeenAdded()) // checks if file already exists
             {
-                DatabaseHelper.AddDataFromCsv("teams", @"..\..\..\Files\teams.csv");
-                DatabaseHelper.AddDataFromCsv("players", @"..\..\..\Files\players.csv");
+                DatabaseHelper.AddDataFromCsv("teams", @"..\..\..\..\Files\teams.csv");
+                DatabaseHelper.AddDataFromCsv("players", @"..\..\..\..\Files\players.csv");
                 DatabaseHelper.SetDataAddedFlag();
             }
         }

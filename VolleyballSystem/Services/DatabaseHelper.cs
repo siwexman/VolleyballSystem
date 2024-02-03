@@ -6,15 +6,15 @@ namespace VolleyballSystem.Services
 {
     public class DatabaseHelper
     {
-        private static string connectionString = @"Data Source=..\..\..\Files\VolleyballSystem.db;Version=3";
+        private static string connectionString = @"Data Source=..\..\..\..\Files\VolleyballSystem.db;Version=3";
 
         public static void InitializeDatabase()
         {
-            if (!File.Exists(@"..\..\..\Files\VolleyballSystem.db"))
+            if (!File.Exists(@"..\..\..\..\Files\VolleyballSystem.db"))
             {
-                SQLiteConnection.CreateFile(@"..\..\..\Files\VolleyballSystem.db");
+                SQLiteConnection.CreateFile(@"..\..\..\..\Files\VolleyballSystem.db");
 
-                using (var connection = new SQLiteConnection(connectionString))
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
                     connection.Open();
 
@@ -126,14 +126,14 @@ namespace VolleyballSystem.Services
         // Returns bool if dataflag file exists
         public static bool DataHasBeenAdded()
         {
-            return File.Exists(@"..\..\..\Files\DataAddedFlag.txt");
+            return File.Exists(@"..\..\..\..\Files\DataAddedFlag.txt");
         }
 
         // Creates txt file that confirm that data has been added
         // It prevents the data from being duplicated
         public static void SetDataAddedFlag()
         {
-            File.WriteAllText(@"..\..\..\Files\DataAddedFlag.txt", $"Data has been added.");
+            File.WriteAllText(@"..\..\..\..\Files\DataAddedFlag.txt", $"Data has been added.");
         }
     }
 }

@@ -34,7 +34,7 @@ namespace VolleyballSystem.Interfaces
 
     public class SQLitePlayers : IPlayerRepository
     {
-        private string connectionString = @"Data Source=..\..\..\Files\VolleyballSystem.db;Version=3";
+        private string connectionString = @"Data Source=..\..\..\..\Files\VolleyballSystem.db;Version=3";
 
         public IEnumerable<Player> GetAllPlayers()
         {

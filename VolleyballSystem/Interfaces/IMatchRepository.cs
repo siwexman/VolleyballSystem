@@ -28,7 +28,7 @@ namespace VolleyballSystem.Interfaces
 
     public class SQLiteMatch : IMatchRepository
     {
-        private string connectionString = @"Data Source=..\..\..\Files\VolleyballSystem.db;Version=3";
+        private string connectionString = @"Data Source=..\..\..\..\Files\VolleyballSystem.db;Version=3";
 
         public IEnumerable<Match> GetAllMatches()
         {
